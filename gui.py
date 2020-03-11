@@ -1,2 +1,0 @@
-# main components
-print('testing')
