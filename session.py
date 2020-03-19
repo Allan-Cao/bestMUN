@@ -2,23 +2,22 @@ import asyncio
 import time
 import os
 import numpy as np
+from tinyDB import TinyDB, Query
 #import matplotlib.pyplot as plt
-#from tinyDB import TinyDB, Query
+db = TinyDB('delegateDatabase.json') # might want to upgrade to sql in the future
 
 flagFolder = "resources/flags" # may need to change
 customFlags = "resouces/customFlags" # may need to change
+statuses = {0: "Absent",1: "Present",2: "Present & Voting", 3: "Other"}
 class delegate():
-    def __init__(self, name, delegation, flagName, spokenTime):
+    def __init__(self, name, delegation, flagName, spokenTime, status):
         self.name = name # delegate name
         self.delegation = delegation # country delegate_names
         self.present = 0 # 0,1,2 absent, present, present and voting
         self.flagName = flagName # standard 4 letter country name
         self.spokenTime = spokenTime # delegate speaking time
-        self.statuses = {
-        0: "Absent",
-        1: "Present",
-        2: "Present & Voting"
-        }
+        self.status = status # maps to the statuses
+        db.insert({'name': name, 'delegation': delegation, 'present': 0, 'flagName': flagName, 'spokenTime': spokenTime, 'status': status})
     def findFlag(self, flagName):
         if os.path.isfile(flagFolder+flagName):
             return(flagFolder + flagName)
